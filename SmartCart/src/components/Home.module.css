@@ -1,0 +1,263 @@
+/* Home.module.css - Responsive and modern styles for Home.jsx */
+
+.home {
+  min-height: 100vh;
+  background: #F5F7FA;
+  padding: 0;
+  font-family: 'Segoe UI', Arial, sans-serif;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 3vw;
+  background: #fff;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.05);
+  position: sticky;
+  top: 0;
+  z-index: 200;
+}
+
+.occasionBar {
+  background: #fff;
+  border-bottom: 2px solid #e0e0e0;
+  position: sticky;
+  top: 56px;
+  z-index: 150;
+  padding: 0.75rem 3vw;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+}
+
+.occasionList {
+  display: flex;
+  gap: clamp(0.5rem, 2vw, 1rem);
+  overflow-x: auto;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  max-width: 1400px;
+  margin: 0 auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.productGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+  width: 100%;
+  align-items: stretch;
+}
+
+.productCard {
+  background: #fff;
+  border-radius: 16px;
+  padding: 1rem;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+  transition: all 0.3s ease;
+  display: grid;
+  grid-template-rows: 220px auto 1fr auto;
+  border: 1px solid #e8e8e8;
+  cursor: pointer;
+  height: 100%;
+}
+
+.productCard:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 12px 35px rgba(71,52,114,0.15);
+  border-color: #53629E;
+}
+
+.productImage {
+  height: 220px;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #fff;
+  width: 100%;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+}
+
+.productImage img {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  transition: transform 0.3s ease;
+}
+
+.productCard:hover .productImage img {
+  transform: scale(1.05);
+}
+
+.productInfo {
+  display: flex;
+  flex-direction: column;
+  padding: 1rem 0 0.5rem 0;
+  gap: 0.25rem;
+}
+
+.productName {
+  margin: 0;
+  color: #333;
+  font-size: 1.05rem;
+  font-weight: 600;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  height: 2.9rem;
+}
+
+.occasionBadge {
+  display: inline-block;
+  padding: 4px 12px;
+  font-size: 11px;
+  border-radius: 20px;
+  background: linear-gradient(135deg, #e2e6f7 0%, #d4d9f0 100%);
+  color: #473472;
+  font-weight: 600;
+  width: fit-content;
+  height: 24px;
+  line-height: 16px;
+}
+
+.noBadge {
+  height: 24px;
+}
+
+.productPrice {
+  margin: 0;
+  color: #473472;
+  font-weight: 700;
+  font-size: 1.4rem;
+  padding-top: 0.5rem;
+}
+
+.actionButtons {
+  display: flex;
+  gap: 0.75rem;
+  padding-top: 1rem;
+  border-top: 1px solid #f0f0f0;
+  align-self: end;
+}
+
+.addToCartBtn {
+  flex: 1;
+  padding: 0.85rem 1rem;
+  border-radius: 10px;
+  border: none;
+  background: linear-gradient(135deg, #473472 0%, #5a4690 100%);
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 0.95rem;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 12px rgba(71,52,114,0.2);
+}
+.addToCartBtn:hover, .addToCartBtn:focus {
+  background: linear-gradient(135deg, #5a4690 0%, #6b58a8 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(71,52,114,0.3);
+}
+
+.tryOnBtn {
+  flex: 1;
+  padding: 0.85rem 1rem;
+  border-radius: 10px;
+  border: 2px solid #473472;
+  background: #fff;
+  color: #473472;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 0.95rem;
+  transition: all 0.2s ease;
+}
+.tryOnBtn:hover, .tryOnBtn:focus {
+  background: #473472;
+  color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(71,52,114,0.25);
+}
+
+.cartMessage {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: #473472;
+  color: #fff;
+  padding: clamp(0.8rem, 2vw, 1rem) clamp(1.5rem, 4vw, 2rem);
+  border-radius: 12px;
+  z-index: 9999;
+  font-weight: 700;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+  font-size: clamp(14px, 2.5vw, 16px);
+  max-width: 90vw;
+}
+
+/* Responsive Breakpoints */
+@media (max-width: 768px) {
+  .productGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+  
+  .productCard {
+    grid-template-rows: 160px auto 1fr auto;
+    padding: 0.75rem;
+  }
+  
+  .productImage {
+    height: 160px;
+  }
+  
+  .productName {
+    font-size: 0.9rem;
+    height: 2.5rem;
+  }
+  
+  .productPrice {
+    font-size: 1.1rem;
+  }
+  
+  .actionButtons {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .addToCartBtn,
+  .tryOnBtn {
+    padding: 0.7rem;
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .productGrid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .productCard {
+    grid-template-rows: 200px auto 1fr auto;
+  }
+  
+  .productImage {
+    height: 200px;
+  }
+  
+  .productName {
+    height: auto;
+    min-height: 1.4rem;
+  }
+  
+  .actionButtons {
+    flex-direction: row;
+  }
+}
