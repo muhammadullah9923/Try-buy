@@ -23,13 +23,13 @@ except ImportError:
 import os
 
 # Set fal.ai API key from environment or use default
-FAL_KEY = os.environ.get('FAL_KEY')
+FAL_KEY = os.environ.get('FAL_KEY', '9dbc353a-781b-41f2-8a06-7574da223d4d:2806394f13eafb33c846987c410bd650')
 if FAL_KEY:
     os.environ['FAL_KEY'] = FAL_KEY
 
 # Stripe API Keys
-STRIPE_PUBLISHABLE_KEY = os.environ.get('STRIPE_PUBLISHABLE_KEY')
-STRIPE_SECRET_KEY = os.environ.get('STRIPE_SECRET_KEY')
+STRIPE_PUBLISHABLE_KEY = os.environ.get('STRIPE_PUBLISHABLE_KEY', 'pk_test_51SnNreRz0zS64JQotGe47zICiuK1YFxM97rRUqUPp8rSz7HEYaEIb02MQRkx9aHEWSLUttW5kKPSoioBlhmABlb200d9DrE41Q')
+STRIPE_SECRET_KEY = os.environ.get('STRIPE_SECRET_KEY', 'sk_test_51SnNreRz0zS64JQoiNtGceGkg6r91wdEEJy8B3CnesT7HYhpxrSkSmiC672Bqu6pi6RmScfAnvqTj5vmpfXrQi4Q00r3zqTbj4')
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
