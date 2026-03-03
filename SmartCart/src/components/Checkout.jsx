@@ -33,7 +33,7 @@ function StripePaymentForm({ formData, cart, onSuccess, onBack }) {
     const token = localStorage.getItem('auth_token');
     if (token) headers['X-Auth-Token'] = token;
     
-    fetch("http://127.0.0.1:8000/api/stripe/create-payment-intent/", {
+    fetch("http://3.226.254.81:8080/api/stripe/create-payment-intent/", {
       method: "POST",
       headers,
       credentials: "include",
@@ -80,7 +80,7 @@ function StripePaymentForm({ formData, cart, onSuccess, onBack }) {
       const token = localStorage.getItem('auth_token');
       if (token) headers['X-Auth-Token'] = token;
       
-      const res = await fetch("http://127.0.0.1:8000/api/stripe/confirm-payment/", {
+      const res = await fetch("http://3.226.254.81:8080/api/stripe/confirm-payment/", {
         method: "POST",
         headers,
         credentials: "include",
@@ -143,7 +143,7 @@ export default function Checkout({ user }) {
     }
     
     // Fetch Stripe config
-    fetch("http://127.0.0.1:8000/api/stripe/config/")
+    fetch("http://3.226.254.81:8080/api/stripe/config/")
       .then(res => res.json())
       .then(data => {
         if (data.success) {
@@ -156,7 +156,7 @@ export default function Checkout({ user }) {
     const headers = { "Content-Type": "application/json" };
     const token = localStorage.getItem('auth_token');
     if (token) headers['X-Auth-Token'] = token;
-    fetch("http://127.0.0.1:8000/api/cart/", { headers, credentials: "include" })
+    fetch("http://3.226.254.81:8080/api/cart/", { headers, credentials: "include" })
       .then(res => res.json())
       .then(data => { if (data.success) setCart(data.cart); })
       .catch(() => { });
@@ -227,7 +227,7 @@ export default function Checkout({ user }) {
             {cart.items.map(item => (
               <div key={item.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                  <img src={item.product.image ? (item.product.image.startsWith('http') ? item.product.image : `http://127.0.0.1:8000${item.product.image}`) : ''} alt="" style={{ width: 40, height: 40, borderRadius: 8, objectFit: 'cover' }} />
+                  <img src={item.product.image ? (item.product.image.startsWith('http') ? item.product.image : `http://3.226.254.81:8080${item.product.image}`) : ''} alt="" style={{ width: 40, height: 40, borderRadius: 8, objectFit: 'cover' }} />
                   <div>
                     <div style={{ fontWeight: 600, color: '#333' }}>{item.product.name}</div>
                     <div style={{ fontSize: '0.9rem', color: '#777' }}>Qty: {item.quantity}</div>

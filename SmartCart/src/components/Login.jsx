@@ -22,7 +22,7 @@ export default function Login({ setUser }) {
     let data = null;
     let res = null;
     try {
-      res = await fetch("http://127.0.0.1:8000/accounts/login/", {
+      res = await fetch("http://3.226.254.81:8080/accounts/login/", {
         method: "POST",
         body: formData,
         credentials: "include",

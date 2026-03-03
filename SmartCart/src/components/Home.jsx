@@ -19,7 +19,7 @@ export default function Home({ user }) {
 
   useEffect(() => {
     // Fetch Occasions
-    fetch('http://127.0.0.1:8000/api/occasions/')
+    fetch('http://3.226.254.81:8080/api/occasions/')
       .then(r => r.json())
       .then(data => {
         if (data.success && data.occasions) {
@@ -34,7 +34,7 @@ export default function Home({ user }) {
       });
 
     // Fetch All Products
-    fetch('http://127.0.0.1:8000/api/products/')
+    fetch('http://3.226.254.81:8080/api/products/')
       .then(r => r.json())
       .then(data => {
         if (data.success && data.products) {
@@ -157,14 +157,14 @@ export default function Home({ user }) {
     };
     
     console.log('🛒 Sending add to cart request:', {
-      url: "http://127.0.0.1:8000/api/cart/add/",
+      url: "http://3.226.254.81:8080/api/cart/add/",
       method: "POST",
       headers,
       body: requestBody,
       credentials: "include"
     });
     
-    fetch("http://127.0.0.1:8000/api/cart/add/", {
+    fetch("http://3.226.254.81:8080/api/cart/add/", {
       method: "POST",
       headers,
       credentials: "include",
@@ -386,7 +386,7 @@ export default function Home({ user }) {
                 >
                   <div className={styles.productImage}>
                     <img 
-                      src={product.image ? (product.image.startsWith('http') ? product.image : `http://127.0.0.1:8000${product.image}`) : 'https://via.placeholder.com/280x220?text=No+Image'}
+                      src={product.image ? (product.image.startsWith('http') ? product.image : `http://3.226.254.81:8080${product.image}`) : 'https://via.placeholder.com/280x220?text=No+Image'}
                       alt={product.name}
                       onError={(e) => {
                         e.target.onerror = null;

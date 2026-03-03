@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useToast } from "./Toast";
 
-const API_BASE = "http://127.0.0.1:8000/api";
+const API_BASE = "http://3.226.254.81:8080/api";
 
 // Stats Card Component
 const StatsCard = ({ title, value, subtitle, color = "#473472", icon }) => (
@@ -293,7 +293,7 @@ export default function AdminDashboard({ user, setUser }) {
 
   const handleLogout = async () => {
     try {
-      await fetch("http://127.0.0.1:8000/accounts/logout/", {
+      await fetch("http://3.226.254.81:8080/accounts/logout/", {
         method: "POST",
         credentials: "include"
       });
@@ -848,7 +848,7 @@ export default function AdminDashboard({ user, setUser }) {
         loading={loading}
         columns={[
           { key: "image", header: "Image", render: (v, row) => v ? (
-            <img src={`http://127.0.0.1:8000${v}`} alt={row.name} style={{ width: 50, height: 50, objectFit: "cover", borderRadius: 6 }} />
+            <img src={`http://3.226.254.81:8080${v}`} alt={row.name} style={{ width: 50, height: 50, objectFit: "cover", borderRadius: 6 }} />
           ) : <span style={{ color: "#999" }}>No image</span> },
           { key: "name", header: "Product Name", render: v => v || "-" },
           { key: "vendor_name", header: "Vendor", render: v => v || "No Vendor" },

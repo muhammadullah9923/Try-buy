@@ -11,7 +11,7 @@ export default function Cart({ user }) {
     setLoading(true);
     const headers = {};
     try { const t = localStorage.getItem('auth_token'); if (t) headers['X-Auth-Token'] = t; } catch (e) { }
-    const res = await fetch("http://127.0.0.1:8000/api/cart/", { credentials: "include", headers });
+    const res = await fetch("http://3.226.254.81:8080/api/cart/", { credentials: "include", headers });
     const data = await res.json();
     if (data.success) setCart(data.cart);
     setLoading(false);
@@ -24,7 +24,7 @@ export default function Cart({ user }) {
   const updateQuantity = async (itemId, qty) => {
     const headers = { "Content-Type": "application/json" };
     try { const t = localStorage.getItem('auth_token'); if (t) headers['X-Auth-Token'] = t; } catch (e) { }
-    await fetch("http://127.0.0.1:8000/api/cart/update/", {
+    await fetch("http://3.226.254.81:8080/api/cart/update/", {
       method: "POST",
       headers,
       credentials: "include",
@@ -36,7 +36,7 @@ export default function Cart({ user }) {
   const removeItem = async (itemId) => {
     const headers = { "Content-Type": "application/json" };
     try { const t = localStorage.getItem('auth_token'); if (t) headers['X-Auth-Token'] = t; } catch (e) { }
-    await fetch("http://127.0.0.1:8000/api/cart/remove/", {
+    await fetch("http://3.226.254.81:8080/api/cart/remove/", {
       method: "POST",
       headers,
       credentials: "include",
@@ -86,7 +86,7 @@ export default function Cart({ user }) {
             {cart.items.map((it) => (
               <div key={it.id} className="cart-item">
                 <div className="item-image">
-                  <img src={it.product.image ? (it.product.image.startsWith('http') ? it.product.image : `http://127.0.0.1:8000${it.product.image}`) : ''} alt={it.product.name} />
+                  <img src={it.product.image ? (it.product.image.startsWith('http') ? it.product.image : `http://3.226.254.81:8080${it.product.image}`) : ''} alt={it.product.name} />
                 </div>
                 <div className="item-info">
                   <div className="item-title">{it.product.name}</div>

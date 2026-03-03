@@ -33,7 +33,7 @@ export default function VendorProfile({ vendorId, vendorData, onUpdate }) {
     setMessage({ type: "", text: "" });
 
     try {
-      const res = await fetch(`http://127.0.0.1:8000/api/vendor/${vendorId}/update_profile/`, {
+      const res = await fetch(`http://3.226.254.81:8080/api/vendor/${vendorId}/update_profile/`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",

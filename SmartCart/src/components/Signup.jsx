@@ -44,7 +44,7 @@ export default function Signup({ setUser }) {
     try {
       if (registerType === "vendor") {
         // Vendor registration
-        const res = await fetch("http://127.0.0.1:8000/accounts/register_vendor/", {
+        const res = await fetch("http://3.226.254.81:8080/accounts/register_vendor/", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           credentials: "include",
@@ -96,7 +96,7 @@ export default function Signup({ setUser }) {
         formData.append("password", form.password);
         formData.append("password2", form.password2);
 
-        const res = await fetch("http://127.0.0.1:8000/accounts/signup/", {
+        const res = await fetch("http://3.226.254.81:8080/accounts/signup/", {
           method: "POST",
           body: formData,
           credentials: "include",
@@ -129,7 +129,7 @@ export default function Signup({ setUser }) {
               const loginForm = new FormData();
               loginForm.append('username', form.username);
               loginForm.append('password', form.password);
-              const loginRes = await fetch('http://127.0.0.1:8000/accounts/login/', {
+              const loginRes = await fetch('http://3.226.254.81:8080/accounts/login/', {
                 method: 'POST',
                 body: loginForm,
                 credentials: 'include',

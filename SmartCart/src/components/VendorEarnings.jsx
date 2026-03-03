@@ -23,7 +23,7 @@ export default function VendorEarnings({ vendorId }) {
   const fetchEarnings = async () => {
     setLoading(true);
     try {
-      const res = await fetch(`http://127.0.0.1:8000/api/vendor/${vendorId}/earnings/?period=${period}`, {
+      const res = await fetch(`http://3.226.254.81:8080/api/vendor/${vendorId}/earnings/?period=${period}`, {
         credentials: "include"
       });
       const data = await res.json();
@@ -39,7 +39,7 @@ export default function VendorEarnings({ vendorId }) {
 
   const fetchPayouts = async () => {
     try {
-      const res = await fetch(`http://127.0.0.1:8000/api/vendor/${vendorId}/payouts/`, {
+      const res = await fetch(`http://3.226.254.81:8080/api/vendor/${vendorId}/payouts/`, {
         credentials: "include"
       });
       const data = await res.json();

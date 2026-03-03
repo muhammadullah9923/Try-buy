@@ -82,7 +82,7 @@ export default function VendorProducts({ vendorId, onStatsChange }) {
   const fetchProducts = async () => {
     setLoading(true);
     try {
-      const res = await fetch(`http://127.0.0.1:8000/api/vendor/${vendorId}/products/`);
+      const res = await fetch(`http://3.226.254.81:8080/api/vendor/${vendorId}/products/`);
       const data = await res.json();
       if (data.success) {
         setProducts(data.products);
@@ -178,7 +178,7 @@ export default function VendorProducts({ vendorId, onStatsChange }) {
     }
 
     try {
-      const res = await fetch("http://127.0.0.1:8000/api/vendor/add_product/", {
+      const res = await fetch("http://3.226.254.81:8080/api/vendor/add_product/", {
         method: "POST",
         body: data
       });
@@ -221,7 +221,7 @@ export default function VendorProducts({ vendorId, onStatsChange }) {
     }
 
     try {
-      const res = await fetch(`http://127.0.0.1:8000/api/vendor/edit_product/${editingProduct.id}/`, {
+      const res = await fetch(`http://3.226.254.81:8080/api/vendor/edit_product/${editingProduct.id}/`, {
         method: "POST",
         body: data
       });
@@ -244,7 +244,7 @@ export default function VendorProducts({ vendorId, onStatsChange }) {
     if (!window.confirm("Are you sure you want to delete this product?")) return;
 
     try {
-      const res = await fetch(`http://127.0.0.1:8000/api/vendor/delete_product/${productId}/`, {
+      const res = await fetch(`http://3.226.254.81:8080/api/vendor/delete_product/${productId}/`, {
         method: "POST",
         credentials: "include"
       });
@@ -263,7 +263,7 @@ export default function VendorProducts({ vendorId, onStatsChange }) {
 
   const handleToggleStatus = async (productId) => {
     try {
-      const res = await fetch(`http://127.0.0.1:8000/api/vendor/product/${productId}/toggle_status/`, {
+      const res = await fetch(`http://3.226.254.81:8080/api/vendor/product/${productId}/toggle_status/`, {
         method: "POST",
         credentials: "include"
       });
@@ -279,7 +279,7 @@ export default function VendorProducts({ vendorId, onStatsChange }) {
   // Stock update uses onBlur to prevent constant API calls
   const handleUpdateStock = async (productId, newStock) => {
     try {
-      const res = await fetch(`http://127.0.0.1:8000/api/vendor/product/${productId}/update_stock/`, {
+      const res = await fetch(`http://3.226.254.81:8080/api/vendor/product/${productId}/update_stock/`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ stock_quantity: parseInt(newStock) || 0 }),
@@ -775,7 +775,7 @@ export default function VendorProducts({ vendorId, onStatsChange }) {
                   <td style={{ padding: 12 }}>
                     {product.image ? (
                       <img
-                        src={product.image.startsWith('http') ? product.image : `http://127.0.0.1:8000${product.image}`}
+                        src={product.image.startsWith('http') ? product.image : `http://3.226.254.81:8080${product.image}`}
                         alt={product.name}
                         style={{ width: 60, height: 60, objectFit: "cover", borderRadius: 8 }}
                       />

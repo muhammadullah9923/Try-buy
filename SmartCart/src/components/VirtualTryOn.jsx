@@ -34,7 +34,7 @@ export default function VirtualTryOn({ product, onClose, onAddToCart, user }) {
 
     try {
       console.log('🔄 Sending try-on request...');
-      const res = await fetch('http://127.0.0.1:8000/api/try-on/', {
+      const res = await fetch('http://3.226.254.81:8080/api/try-on/', {
         method: 'POST',
         body: formData,
         credentials: 'include',
@@ -57,7 +57,7 @@ export default function VirtualTryOn({ product, onClose, onAddToCart, user }) {
         // Ensure URL is absolute
         let imageUrl = data.result_image;
         if (!imageUrl.startsWith('http')) {
-          imageUrl = `http://127.0.0.1:8000${imageUrl.startsWith('/') ? imageUrl : '/' + imageUrl}`;
+          imageUrl = `http://3.226.254.81:8080${imageUrl.startsWith('/') ? imageUrl : '/' + imageUrl}`;
         }
         console.log('✓ Try-on successful! Result URL:', imageUrl);
         setResultImage(imageUrl);

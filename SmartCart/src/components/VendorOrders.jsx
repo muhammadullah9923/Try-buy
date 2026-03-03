@@ -21,7 +21,7 @@ export default function VendorOrders({ vendorId, onStatsChange }) {
   const fetchOrders = async () => {
     setLoading(true);
     try {
-      const res = await fetch(`http://127.0.0.1:8000/api/vendor/${vendorId}/orders/`, {
+      const res = await fetch(`http://3.226.254.81:8080/api/vendor/${vendorId}/orders/`, {
         credentials: "include"
       });
       const data = await res.json();
@@ -36,7 +36,7 @@ export default function VendorOrders({ vendorId, onStatsChange }) {
 
   const updateOrderStatus = async (orderId, itemId, newStatus) => {
     try {
-      const res = await fetch(`http://127.0.0.1:8000/api/vendor/order/update_status/`, {
+      const res = await fetch(`http://3.226.254.81:8080/api/vendor/order/update_status/`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
@@ -192,7 +192,7 @@ export default function VendorOrders({ vendorId, onStatsChange }) {
               <div>
                 {order.product_image ? (
                   <img
-                    src={order.product_image.startsWith('http') ? order.product_image : `http://127.0.0.1:8000${order.product_image}`}
+                    src={order.product_image.startsWith('http') ? order.product_image : `http://3.226.254.81:8080${order.product_image}`}
                     alt={order.product_name}
                     style={{ width: 80, height: 80, objectFit: "cover", borderRadius: 8 }}
                   />

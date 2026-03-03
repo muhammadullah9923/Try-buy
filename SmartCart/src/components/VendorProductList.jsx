@@ -13,7 +13,7 @@ export default function VendorProductList({ vendorId }) {
   useEffect(() => {
     if (!vendorId) return;
     setLoading(true);
-    fetch(`http://127.0.0.1:8000/api/vendor/${vendorId}/products/`)
+    fetch(`http://3.226.254.81:8080/api/vendor/${vendorId}/products/`)
       .then(r => r.json())
       .then(data => {
         if (data.success && data.products) {
@@ -36,7 +36,7 @@ export default function VendorProductList({ vendorId }) {
       <VendorAddProduct vendorId={vendorId} onProductAdded={() => {
         // Refresh product list after adding
         setLoading(true);
-        fetch(`http://127.0.0.1:8000/api/vendor/${vendorId}/products/`)
+        fetch(`http://3.226.254.81:8080/api/vendor/${vendorId}/products/`)
           .then(r => r.json())
           .then(data => {
             if (data.success && data.products) {
@@ -51,7 +51,7 @@ export default function VendorProductList({ vendorId }) {
             <VendorEditProduct product={editingProduct} onUpdated={() => {
               setEditingProduct(null);
               setLoading(true);
-              fetch(`http://127.0.0.1:8000/api/vendor/${vendorId}/products/`)
+              fetch(`http://3.226.254.81:8080/api/vendor/${vendorId}/products/`)
                 .then(r => r.json())
                 .then(data => {
                   if (data.success && data.products) {
@@ -85,7 +85,7 @@ export default function VendorProductList({ vendorId }) {
                 <td>Rs. {p.price}</td>
                 <td>{p.occasion || "-"}</td>
                 <td>{p.description}</td>
-                <td>{p.image ? <img src={p.image.startsWith('http') ? p.image : `http://127.0.0.1:8000${p.image}`} alt={p.name} style={{ width: 60, borderRadius: 6 }} /> : "-"}</td>
+                <td>{p.image ? <img src={p.image.startsWith('http') ? p.image : `http://3.226.254.81:8080${p.image}`} alt={p.name} style={{ width: 60, borderRadius: 6 }} /> : "-"}</td>
                 <td><button onClick={() => setEditingProduct(p)} style={{ background: '#473472', color: '#fff', border: 'none', borderRadius: 6, padding: '4px 12px', fontWeight: 700, cursor: 'pointer' }}>Edit</button></td>
               </tr>
             ))}

@@ -22,7 +22,7 @@ export default function UpgradeToVendor({ user, setUser }) {
     setMessage({ type: "", text: "" });
 
     try {
-      const res = await fetch("http://127.0.0.1:8000/accounts/upgrade_to_vendor/", {
+      const res = await fetch("http://3.226.254.81:8080/accounts/upgrade_to_vendor/", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",

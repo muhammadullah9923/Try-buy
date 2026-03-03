@@ -82,7 +82,7 @@ export default function ProductDetails({ user }) {
 
     try {
       // Send request to backend
-      const res = await fetch("http://127.0.0.1:8000/api/cart/add/", {
+      const res = await fetch("http://3.226.254.81:8080/api/cart/add/", {
         method: "POST",
         headers,
         credentials: "include",
@@ -182,7 +182,7 @@ export default function ProductDetails({ user }) {
         width: '100%',
         textAlign: 'center'
       }}>
-        <img src={product.image ? (product.image.startsWith('http') ? product.image : `http://127.0.0.1:8000${product.image}`) : ''} alt={product.name} style={{ width: '100%', height: 260, objectFit: 'cover', borderRadius: 12, boxShadow: '0 2px 12px #87BAC322', marginBottom: 18 }} />
+        <img src={product.image ? (product.image.startsWith('http') ? product.image : `http://3.226.254.81:8080${product.image}`) : ''} alt={product.name} style={{ width: '100%', height: 260, objectFit: 'cover', borderRadius: 12, boxShadow: '0 2px 12px #87BAC322', marginBottom: 18 }} />
         <h2 style={{ margin: '1rem 0 0.5rem 0', fontWeight: 700, fontSize: 28, color: '#473472' }}>{product.name}</h2>
         <p style={{ fontWeight: 700, color: '#53629E', fontSize: 20, marginBottom: 18 }}>{product.price}</p>
         <div style={{ margin: '1.5rem 0', display: 'flex', justifyContent: 'center', gap: 18 }}>

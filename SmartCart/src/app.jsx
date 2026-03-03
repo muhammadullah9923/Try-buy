@@ -270,7 +270,7 @@ function App() {
   const [authChecked, setAuthChecked] = useState(false);
 
   useEffect(() => {
-    fetch("http://127.0.0.1:8000/accounts/current-user/", {
+    fetch("http://3.226.254.81:8080/accounts/current-user/", {
       credentials: "include",
     })
       .then(res => res.json())

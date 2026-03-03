@@ -20,7 +20,7 @@ export default function VendorLogin({ setUser }) {
     Object.keys(form).forEach((key) => formData.append(key, form[key]));
 
     try {
-      const res = await fetch("http://127.0.0.1:8000/accounts/login/vendor/", {
+      const res = await fetch("http://3.226.254.81:8080/accounts/login/vendor/", {
         method: "POST",
         body: formData,
         credentials: "include",

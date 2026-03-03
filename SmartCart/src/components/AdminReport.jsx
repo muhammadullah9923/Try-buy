@@ -9,7 +9,7 @@ export default function AdminReport() {
     setLoading(true);
     setError("");
     try {
-      const res = await fetch("http://127.0.0.1:8000/api/admin/report/");
+      const res = await fetch("http://3.226.254.81:8080/api/admin/report/");
       const data = await res.json();
       if (data.success) setReport(data);
       else setError(data.message || "Failed to load report.");

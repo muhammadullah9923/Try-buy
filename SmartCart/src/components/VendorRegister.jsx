@@ -35,7 +35,7 @@ export default function VendorRegister({ onRegistered, setUser }) {
     }
 
     try {
-      const res = await fetch("http://127.0.0.1:8000/accounts/register_vendor/", {
+      const res = await fetch("http://3.226.254.81:8080/accounts/register_vendor/", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
