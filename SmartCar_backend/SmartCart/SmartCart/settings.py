@@ -153,9 +153,7 @@ MEDIA_ROOT = BASE_DIR / "media"
 # Instead, we specify allowed origins explicitly
 CORS_ALLOW_ALL_ORIGINS = True  # Must be False when using credentials
 CORS_ALLOW_CREDENTIALS = True
-CORS_ALLOWED_ORIGINS = [
-    "*"
-]
+CORS_ALLOWED_ORIGINS = ["*"]
 CORS_ALLOW_HEADERS = [
     'accept',
     'accept-encoding',
