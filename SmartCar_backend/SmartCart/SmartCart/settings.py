@@ -151,9 +151,18 @@ MEDIA_ROOT = BASE_DIR / "media"
 # CORS configuration for development
 # When using credentials, we cannot use CORS_ALLOW_ALL_ORIGINS = True
 # Instead, we specify allowed origins explicitly
-CORS_ALLOW_ALL_ORIGINS = True  # Must be False when using credentials
+CORS_ALLOW_ALL_ORIGINS = False
 CORS_ALLOW_CREDENTIALS = True
-CORS_ALLOWED_ORIGINS = ["*"]
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",
+    "http://3.226.254.81:3000",  # your EC2 IP
+]
+
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost:3000",
+    "http://3.226.254.81:3000",
+]
 CORS_ALLOW_HEADERS = [
     'accept',
     'accept-encoding',
