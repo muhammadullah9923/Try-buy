@@ -20,8 +20,6 @@ try:
 except ImportError:
     pass  # dotenv not installed, skip loading .env file
 
-import os
-
 # Set fal.ai API key from environment or use default
 FAL_KEY = os.environ.get('FAL_KEY', '9dbc353a-781b-41f2-8a06-7574da223d4d:2806394f13eafb33c846987c410bd650')
 if FAL_KEY:
@@ -151,17 +149,15 @@ MEDIA_ROOT = BASE_DIR / "media"
 # CORS configuration for development
 # When using credentials, we cannot use CORS_ALLOW_ALL_ORIGINS = True
 # Instead, we specify allowed origins explicitly
-CORS_ALLOW_ALL_ORIGINS = False  # Must be False when using credentials
+CORS_ALLOW_ALL_ORIGINS = False
 CORS_ALLOW_CREDENTIALS = True
+
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5173",
     "http://localhost:3000",
-    "http://127.0.0.1:5173",
-    "http://127.0.0.1:3000",
-    "http://localhost:5174",
-    "http://127.0.0.1:5174",
+    "http://3.226.254.81:3000",  # your EC2 IP
     "https://tryandbuyvton.netlify.app",
 ]
+
 CORS_ALLOW_HEADERS = [
     'accept',
     'accept-encoding',
@@ -194,9 +190,12 @@ CSRF_COOKIE_SAMESITE = 'Lax'
 CSRF_COOKIE_SECURE = False  # Set to True in production with HTTPS
 CSRF_TRUSTED_ORIGINS = [
     "http://localhost:5173",
+    "http://3.226.254.81:5173",
+    "http://3.226.254.81:3000",
     "http://localhost:3000",
     "http://127.0.0.1:5173",
     "http://127.0.0.1:3000",
     "http://localhost:5174",
     "http://127.0.0.1:5174",
+    "https://tryandbuyvton.netlify.app",
 ]
