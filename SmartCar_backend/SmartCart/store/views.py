@@ -865,9 +865,8 @@ def virtual_try_on(request):
                         product_image_url = product.image.path
                     else:
                         product_image_url = str(product.image)
-                    print(f"Product image URL: {product_image_url}")
             except Product.DoesNotExist:
-                print(f"Product not found: {product_id}")
+                pass
         
         # Initialize service and process try-on
         service = VirtualTryOnService()
