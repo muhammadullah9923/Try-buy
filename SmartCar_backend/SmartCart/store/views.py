@@ -865,8 +865,9 @@ def virtual_try_on(request):
                         product_image_url = product.image.path
                     else:
                         product_image_url = str(product.image)
+                        print(f"Warning: Product image field has no url or path attribute, using str(): {product_image_url}")
             except Product.DoesNotExist:
-                pass
+                response = JsonResponse({"success": False, "message": "Product not found"}, status=404)
         
         # Initialize service and process try-on
         service = VirtualTryOnService()
