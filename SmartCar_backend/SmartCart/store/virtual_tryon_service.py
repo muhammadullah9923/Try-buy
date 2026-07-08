@@ -117,10 +117,13 @@ class VirtualTryOnService:
             person_image_uri = self._image_to_data_uri(user_image)
             
             # 2. Prepare garment image
+            print(f"✓ Preparing garment image from URL: {product_image_url}")
             logger.info("Preparing clothing image...")
             if product_image_url.startswith('http'):
+                print(f"✓ Downloading garment image from URL: {product_image_url}")
                 # Download and convert to data URI
                 resp = requests.get(product_image_url)
+                print(f"✓ Downloaded garment image (status code: {resp.status_code})")
                 garment_img = Image.open(BytesIO(resp.content))
                 clothing_image_uri = self._image_to_data_uri(garment_img)
             elif product_image_url.startswith('data:'):
