@@ -61,13 +61,16 @@ class VirtualTryOnService:
     def _image_to_data_uri(self, image):
         """Convert PIL Image or file to base64 data URI"""
         if hasattr(image, 'read'):
+            print("✓ Converting file-like object to data URI")
             # It's a file-like object
             img = Image.open(image)
         else:
+            print("✓ Converting PIL Image to data URI")
             img = image
             
         # Convert to RGB if necessary
         if img.mode != 'RGB':
+            print(f"✓ Converting image mode from {img.mode} to RGB")
             img = img.convert('RGB')
         
         # Resize to reasonable size for API (max 1024)
@@ -79,7 +82,7 @@ class VirtualTryOnService:
         img.save(buffer, format='JPEG', quality=90)
         buffer.seek(0)
         img_base64 = base64.b64encode(buffer.read()).decode('utf-8')
-        
+        print(f"✓ Image converted to data URI (length: {len(img_base64)} characters)")
         return f"data:image/jpeg;base64,{img_base64}"
 
     def _upload_to_fal(self, image_data_uri):
@@ -92,12 +95,14 @@ class VirtualTryOnService:
         Process virtual try-on using Fal.ai API with fal_client library.
         """
         if not self.api_key:
+            print("✓ FAL_KEY not configured. Please add FAL_KEY to your .env file.")
             return {
                 "success": False,
                 "message": "FAL_KEY not configured. Please add FAL_KEY to your .env file."
             }
         
         if not FAL_CLIENT_AVAILABLE:
+            print("✓ fal-client not installed. Run: pip install fal-client")
             return {
                 "success": False,
                 "message": "fal-client not installed. Run: pip install fal-client"
@@ -108,6 +113,7 @@ class VirtualTryOnService:
             
             # 1. Prepare human image (user photo)
             logger.info("Preparing person image...")
+            print("✓ Preparing person image...")
             person_image_uri = self._image_to_data_uri(user_image)
             
             # 2. Prepare garment image
