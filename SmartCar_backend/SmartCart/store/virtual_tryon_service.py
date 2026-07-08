@@ -38,39 +38,29 @@ class VirtualTryOnService:
         # Set the API key in environment for fal_client
         if self.api_key:
             os.environ['FAL_KEY'] = self.api_key
-
-        print(f"✓ VirtualTryOnService initialized with FAL_KEY: {self.api_key}")
         
         # Ensure media directory for results exists
         self.result_dir = os.path.join(settings.MEDIA_ROOT, 'tryon', 'results')
         os.makedirs(self.result_dir, exist_ok=True)
         
-        print(f"✓ VirtualTryOnService result directory: {self.result_dir}")
-        
         if not self.api_key:
-            print("✓ FAL_KEY not found in environment. Please set it in .env file.")
             logger.warning("FAL_KEY not found in environment. Please set it in .env file.")
         else:
-            print("✓ FAL_KEY loaded successfully")
             logger.info(f"FAL_KEY loaded successfully")
             
         if not FAL_CLIENT_AVAILABLE:
-            print("✓ fal-client not installed. Run: pip install fal-client")
             logger.warning("fal-client not installed. Run: pip install fal-client")
 
     def _image_to_data_uri(self, image):
         """Convert PIL Image or file to base64 data URI"""
         if hasattr(image, 'read'):
-            print("✓ Converting file-like object to data URI")
             # It's a file-like object
             img = Image.open(image)
         else:
-            print("✓ Converting PIL Image to data URI")
             img = image
             
         # Convert to RGB if necessary
         if img.mode != 'RGB':
-            print(f"✓ Converting image mode from {img.mode} to RGB")
             img = img.convert('RGB')
         
         # Resize to reasonable size for API (max 1024)
@@ -82,7 +72,7 @@ class VirtualTryOnService:
         img.save(buffer, format='JPEG', quality=90)
         buffer.seek(0)
         img_base64 = base64.b64encode(buffer.read()).decode('utf-8')
-        print(f"✓ Image converted to data URI (length: {len(img_base64)} characters)")
+        
         return f"data:image/jpeg;base64,{img_base64}"
 
     def _upload_to_fal(self, image_data_uri):
@@ -95,14 +85,12 @@ class VirtualTryOnService:
         Process virtual try-on using Fal.ai API with fal_client library.
         """
         if not self.api_key:
-            print("✓ FAL_KEY not configured. Please add FAL_KEY to your .env file.")
             return {
                 "success": False,
                 "message": "FAL_KEY not configured. Please add FAL_KEY to your .env file."
             }
         
         if not FAL_CLIENT_AVAILABLE:
-            print("✓ fal-client not installed. Run: pip install fal-client")
             return {
                 "success": False,
                 "message": "fal-client not installed. Run: pip install fal-client"
@@ -113,17 +101,13 @@ class VirtualTryOnService:
             
             # 1. Prepare human image (user photo)
             logger.info("Preparing person image...")
-            print("✓ Preparing person image...")
             person_image_uri = self._image_to_data_uri(user_image)
             
             # 2. Prepare garment image
-            print(f"✓ Preparing garment image from URL: {product_image_url}")
             logger.info("Preparing clothing image...")
             if product_image_url.startswith('http'):
-                print(f"✓ Downloading garment image from URL: {product_image_url}")
                 # Download and convert to data URI
                 resp = requests.get(product_image_url)
-                print(f"✓ Downloaded garment image (status code: {resp.status_code})")
                 garment_img = Image.open(BytesIO(resp.content))
                 clothing_image_uri = self._image_to_data_uri(garment_img)
             elif product_image_url.startswith('data:'):
@@ -131,29 +115,24 @@ class VirtualTryOnService:
                 clothing_image_uri = product_image_url
             else:
                 # Local file path
-                print(f"✓ Loading garment image from local path: {product_image_url}")
                 if product_image_url.startswith('/media/'):
-                    print(f"✓ Converting media path to absolute path: {product_image_url}")
                     rel_path = product_image_url.lstrip('/')
-                    print(f"✓ Relative path for garment image: {rel_path}")
                     product_image_path = os.path.join(settings.BASE_DIR, rel_path)
-                    print(f"✓ Absolute path for garment image: {product_image_path}")
                 else:
-                    print(f"✓ Using provided product image path: {product_image_url}")
                     product_image_path = product_image_url
-                    print(f"✓ Product image path: {product_image_path}")
                 garment_img = Image.open(product_image_path)
-                print(f"✓ Loaded garment image from local path: {product_image_path}")
                 clothing_image_uri = self._image_to_data_uri(garment_img)
             
             # 3. Call Fal.ai using fal_client
             logger.info("Submitting to Fal.ai IDM-VTON API using fal_client...")
             
             def on_queue_update(update):
+                print(f"Fal.ai queue update: {update}")
                 if isinstance(update, fal_client.InProgress):
                     for log in update.logs:
                         logger.info(f"Fal.ai: {log.get('message', '')}")
             
+            print("Calling fal_client.subscribe...")
             result = fal_client.subscribe(
                 "fal-ai/idm-vton",
                 arguments={
@@ -166,6 +145,7 @@ class VirtualTryOnService:
             )
             
             logger.info(f"Fal.ai result: {result}")
+            print(f"Fal.ai result: {result}")
             
             # 4. Extract result image
             result_image_url = None

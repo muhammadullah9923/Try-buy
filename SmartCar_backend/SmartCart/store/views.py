@@ -871,7 +871,6 @@ def virtual_try_on(request):
         
         # Initialize service and process try-on
         service = VirtualTryOnService()
-        print("✓ Calling VirtualTryOnService.process_try_on() with user image and product image")
         result = service.process_try_on(
             user_image=image_file,
             product_image_url=product_image_url,
