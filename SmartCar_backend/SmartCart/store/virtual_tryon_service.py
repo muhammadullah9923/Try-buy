@@ -38,17 +38,24 @@ class VirtualTryOnService:
         # Set the API key in environment for fal_client
         if self.api_key:
             os.environ['FAL_KEY'] = self.api_key
+
+        print(f"✓ VirtualTryOnService initialized with FAL_KEY: {self.api_key}")
         
         # Ensure media directory for results exists
         self.result_dir = os.path.join(settings.MEDIA_ROOT, 'tryon', 'results')
         os.makedirs(self.result_dir, exist_ok=True)
         
+        print(f"✓ VirtualTryOnService result directory: {self.result_dir}")
+        
         if not self.api_key:
+            print("✓ FAL_KEY not found in environment. Please set it in .env file.")
             logger.warning("FAL_KEY not found in environment. Please set it in .env file.")
         else:
+            print("✓ FAL_KEY loaded successfully")
             logger.info(f"FAL_KEY loaded successfully")
             
         if not FAL_CLIENT_AVAILABLE:
+            print("✓ fal-client not installed. Run: pip install fal-client")
             logger.warning("fal-client not installed. Run: pip install fal-client")
 
     def _image_to_data_uri(self, image):
