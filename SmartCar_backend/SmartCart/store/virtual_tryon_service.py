@@ -39,6 +39,12 @@ class VirtualTryOnService:
         if self.api_key:
             os.environ['FAL_KEY'] = self.api_key
         
+        # Prefer IDM-VTON first, but fall back to the lighter FASHN model when the queue is too deep.
+        self.preferred_model = os.getenv('FAL_TRY_ON_MODEL', 'fal-ai/idm-vton')
+        self.fallback_model = os.getenv('FAL_TRY_ON_FALLBACK_MODEL', 'fashn-ai/tryon')
+        self.max_queue_position = int(os.getenv('FAL_MAX_QUEUE_POSITION', '10'))
+        self._last_queue_position = None
+        
         # Ensure media directory for results exists
         self.result_dir = os.path.join(settings.MEDIA_ROOT, 'tryon', 'results')
         os.makedirs(self.result_dir, exist_ok=True)
@@ -50,6 +56,54 @@ class VirtualTryOnService:
             
         if not FAL_CLIENT_AVAILABLE:
             logger.warning("fal-client not installed. Run: pip install fal-client")
+
+    def _select_model(self, preferred_model=None, queue_position=None):
+        """Choose the model to use. Switch to a fallback model when the queue is too long."""
+        requested_model = preferred_model or self.preferred_model
+
+        if queue_position is not None and queue_position > self.max_queue_position:
+            logger.warning(
+                "Fal.ai queue position %s is above the threshold %s; switching to fallback model %s",
+                queue_position,
+                self.max_queue_position,
+                self.fallback_model,
+            )
+            return self.fallback_model
+
+        return requested_model or self.preferred_model
+
+    def _extract_queue_position(self, update):
+        """Extract a queue position from a Fal.ai queue update object when possible."""
+        if update is None:
+            return None
+
+        for attr in ('queue_position', 'position', 'queuePosition'):
+            value = getattr(update, attr, None)
+            if isinstance(value, (int, float)):
+                return int(value)
+
+        if isinstance(update, dict):
+            for key in ('queue_position', 'position', 'queuePosition'):
+                value = update.get(key)
+                if isinstance(value, (int, float)):
+                    return int(value)
+
+        return None
+
+    def _build_fal_arguments(self, person_image_uri, clothing_image_uri, model_name):
+        """Build the correct request arguments for the selected Fal.ai model."""
+        if model_name == 'fashn-ai/tryon':
+            return {
+                'model_image': person_image_uri,
+                'garment_image': clothing_image_uri,
+                'category': 'tops',
+            }
+
+        return {
+            'human_image_url': person_image_uri,
+            'garment_image_url': clothing_image_uri,
+            'description': 'A person wearing the clothing',
+        }
 
     def _image_to_data_uri(self, image):
         """Convert PIL Image or file to base64 data URI"""
@@ -63,13 +117,13 @@ class VirtualTryOnService:
         if img.mode != 'RGB':
             img = img.convert('RGB')
         
-        # Resize to reasonable size for API (max 1024)
-        max_size = 1024
+        # Resize to a smaller size for faster API processing.
+        max_size = 768
         img.thumbnail((max_size, max_size), Image.Resampling.LANCZOS)
         
         # Convert to base64
         buffer = BytesIO()
-        img.save(buffer, format='JPEG', quality=90)
+        img.save(buffer, format='JPEG', quality=85)
         buffer.seek(0)
         img_base64 = base64.b64encode(buffer.read()).decode('utf-8')
         
@@ -124,25 +178,49 @@ class VirtualTryOnService:
                 clothing_image_uri = self._image_to_data_uri(garment_img)
             
             # 3. Call Fal.ai using fal_client
-            logger.info("Submitting to Fal.ai IDM-VTON API using fal_client...")
-            
-            def on_queue_update(update):
-                print(f"Fal.ai queue update: {update}")
-                if isinstance(update, fal_client.InProgress):
-                    for log in update.logs:
-                        logger.info(f"Fal.ai: {log.get('message', '')}")
-            
-            print("Calling fal_client.subscribe...")
-            result = fal_client.subscribe(
-                "fal-ai/idm-vton",
-                arguments={
-                    "human_image_url": person_image_uri,
-                    "garment_image_url": clothing_image_uri,
-                    "description": "A person wearing the clothing"
-                },
-                with_logs=True,
-                on_queue_update=on_queue_update,
-            )
+            candidate_models = [provider or self.preferred_model]
+            if (provider or self.preferred_model) != self.fallback_model:
+                candidate_models.append(self.fallback_model)
+
+            last_error = None
+            result = None
+            for model_name in candidate_models:
+                selected_model = self._select_model(preferred_model=model_name)
+                logger.info("Submitting to Fal.ai model %s using fal_client...", selected_model)
+                
+                def on_queue_update(update, selected_model=selected_model):
+                    self._last_queue_position = self._extract_queue_position(update)
+                    if self._last_queue_position is not None:
+                        logger.info("Fal.ai queue update for %s: position=%s", selected_model, self._last_queue_position)
+                    if self._last_queue_position is not None and self._last_queue_position > self.max_queue_position:
+                        raise RuntimeError(
+                            f"Fal.ai queue position too high ({self._last_queue_position}). Trying a smaller model."
+                        )
+
+                    if hasattr(fal_client, 'InProgress') and isinstance(update, fal_client.InProgress):
+                        for log in getattr(update, 'logs', []) or []:
+                            if isinstance(log, dict):
+                                logger.info("Fal.ai: %s", log.get('message', ''))
+                            else:
+                                logger.info("Fal.ai: %s", str(log))
+                
+                print(f"Calling fal_client.subscribe for {selected_model}...")
+                try:
+                    result = fal_client.subscribe(
+                        selected_model,
+                        arguments=self._build_fal_arguments(person_image_uri, clothing_image_uri, selected_model),
+                        with_logs=True,
+                        on_queue_update=on_queue_update,
+                    )
+                    break
+                except Exception as exc:
+                    last_error = exc
+                    logger.warning("Fal.ai request for %s failed: %s", selected_model, exc)
+                    if selected_model == self.fallback_model:
+                        raise
+
+            if result is None:
+                raise last_error or RuntimeError("Fal.ai try-on could not be completed")
             
             logger.info(f"Fal.ai result: {result}")
             print(f"Fal.ai result: {result}")
