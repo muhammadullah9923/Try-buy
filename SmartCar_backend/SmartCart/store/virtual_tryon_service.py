@@ -131,12 +131,19 @@ class VirtualTryOnService:
                 clothing_image_uri = product_image_url
             else:
                 # Local file path
+                print(f"✓ Loading garment image from local path: {product_image_url}")
                 if product_image_url.startswith('/media/'):
+                    print(f"✓ Converting media path to absolute path: {product_image_url}")
                     rel_path = product_image_url.lstrip('/')
+                    print(f"✓ Relative path for garment image: {rel_path}")
                     product_image_path = os.path.join(settings.BASE_DIR, rel_path)
+                    print(f"✓ Absolute path for garment image: {product_image_path}")
                 else:
+                    print(f"✓ Using provided product image path: {product_image_url}")
                     product_image_path = product_image_url
+                    print(f"✓ Product image path: {product_image_path}")
                 garment_img = Image.open(product_image_path)
+                print(f"✓ Loaded garment image from local path: {product_image_path}")
                 clothing_image_uri = self._image_to_data_uri(garment_img)
             
             # 3. Call Fal.ai using fal_client
